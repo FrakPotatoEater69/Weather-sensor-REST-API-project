@@ -17,7 +17,6 @@ public class Sensor {
     private Integer id;
 
     @Column(name = "name")
-    @NotNull(message = "name of sensor should not be empty")
     @NotEmpty(message = "name of sensor should not be empty")
     @Size(min = 3, max = 30, message = "sensor name should be between 3 and 30 characters")
     private String name;

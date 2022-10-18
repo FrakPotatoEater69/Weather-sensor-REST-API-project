@@ -7,6 +7,7 @@ import com.shakhner.sensorRestProject.weatherSensorRestProject.exceptions.Respon
 import com.shakhner.sensorRestProject.weatherSensorRestProject.exceptions.sensorExceptions.SensorNotCreatedException;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.exceptions.sensorExceptions.SensorNotFoundException;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Sensor;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.util.ExceptionInfoCreator;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.util.validators.SensorValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -55,22 +56,17 @@ public class SensorController {
 
         sensorValidator.validate(sensorDTO, bindingResult);
         if(bindingResult.hasErrors()){
-            StringBuilder errors = new StringBuilder();
-            List<FieldError> fields = bindingResult.getFieldErrors();
-            for(FieldError fieldError : fields){
-                errors.append(fieldError.getField()).append(" – ").append(fieldError.getDefaultMessage()).append(";");
-            }
 
-            throw new SensorNotCreatedException(errors.toString());
+            throw new SensorNotCreatedException(ExceptionInfoCreator.getInfo(bindingResult));
         }
 
         sensorService.saveSensor(convertToSensor(sensorDTO));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @PatchMapping
-    @RequestMapping("/updateLocation")
-
+//    @PatchMapping
+//    @RequestMapping("/updatelocation")
+//    public ResponseEntity<HttpStatus>
 
 
 
