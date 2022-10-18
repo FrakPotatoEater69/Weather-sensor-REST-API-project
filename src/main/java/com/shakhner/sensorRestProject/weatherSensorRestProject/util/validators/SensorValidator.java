@@ -1,6 +1,7 @@
-package com.shakhner.sensorRestProject.weatherSensorRestProject.validators;
+package com.shakhner.sensorRestProject.weatherSensorRestProject.util.validators;
 
 import com.shakhner.sensorRestProject.weatherSensorRestProject.Services.SensorService;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.SensorDTO;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Sensor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,12 +19,12 @@ public class SensorValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return Sensor.class.equals(clazz);
+        return SensorDTO.class.equals(clazz);
     }
 
     @Override
     public void validate(Object target, Errors errors) {
-        String sensorName = ((Sensor) target).getName();
+        String sensorName = ((SensorDTO) target).getName();
 
         if(sensorService.getSensorByName(sensorName).isPresent()){
             errors.rejectValue("name", "", "Sensor with this name is already exist");

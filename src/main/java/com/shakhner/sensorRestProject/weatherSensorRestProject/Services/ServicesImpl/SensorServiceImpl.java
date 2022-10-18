@@ -1,6 +1,7 @@
 package com.shakhner.sensorRestProject.weatherSensorRestProject.Services.ServicesImpl;
 
 import com.shakhner.sensorRestProject.weatherSensorRestProject.Services.SensorService;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.exceptions.sensorExceptions.SensorNotFoundException;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Measurement;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Sensor;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.repositories.SensorRepository;
@@ -30,8 +31,12 @@ public class SensorServiceImpl implements SensorService {
 
     @Override
     public Optional<Sensor> getSensorById(int sensor_id) {
-        return sensorRepository.findById(sensor_id);
-        //TODO Throw exception, if not found
+        Optional<Sensor> sensor = sensorRepository.findById(sensor_id);
+
+        if(sensor.isEmpty())
+            throw new SensorNotFoundException();
+
+        return sensor;
     }
 
     @Override
