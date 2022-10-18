@@ -20,4 +20,6 @@ public interface SensorService {
     public List<Measurement> getMeasurementsList(int sensor_id);
 
     public List<Sensor> getPageableAndSortedSensorList(Integer page, Integer SensorPerPage, Boolean sortByDate);
+
+    public Optional<Sensor> getSensorByName(String SensorName);
 }

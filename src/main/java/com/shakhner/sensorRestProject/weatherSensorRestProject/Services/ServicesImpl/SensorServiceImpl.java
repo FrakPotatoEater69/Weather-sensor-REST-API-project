@@ -71,4 +71,9 @@ public class SensorServiceImpl implements SensorService {
         //TODO
         return null;
     }
+
+    @Override
+    public Optional<Sensor> getSensorByName(String sensorName) {
+        return sensorRepository.findByName(sensorName);
+    }
 }
