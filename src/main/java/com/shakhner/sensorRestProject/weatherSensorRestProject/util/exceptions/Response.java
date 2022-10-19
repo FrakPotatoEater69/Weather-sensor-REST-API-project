@@ -4,9 +4,9 @@ public class Response {
     private String message;
     private long timestamp;
 
-    public Response(String message, long timestamp) {
+    public Response(String message) {
         this.message = message;
-        this.timestamp = timestamp;
+        this.timestamp = System.currentTimeMillis();
     }
 
     public String getMessage() {

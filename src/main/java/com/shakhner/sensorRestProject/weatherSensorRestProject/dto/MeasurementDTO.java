@@ -4,15 +4,16 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Sensor;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.*;
 
 public class MeasurementDTO {
 
     @Min(value = -100, message = "minimum temperature value is -100")
     @Max(value = 100, message = "maximum temperature value is -100")
+    @NotNull(message = "Temperature value should not be empty")
     private Double temperatureValue;
 
+    @NotNull(message = "Raining value should not be empty")
     private Boolean raining;
 
     @Min(value = 0, message = "wind speed can not be less then 0")
@@ -52,4 +53,5 @@ public class MeasurementDTO {
     public void setSensor(Sensor sensor) {
         this.sensor = sensor;
     }
+
 }

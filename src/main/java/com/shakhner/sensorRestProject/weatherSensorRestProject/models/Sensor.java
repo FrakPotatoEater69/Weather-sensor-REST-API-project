@@ -23,6 +23,7 @@ public class Sensor {
 
     @Column(name = "location")
     @Size(min = 3, max = 30, message = "location name should be between 3 and 30 characters")
+    @NotEmpty(message = "name of location should not be empty")
     private String location;
 
     @OneToMany(mappedBy = "sensor")

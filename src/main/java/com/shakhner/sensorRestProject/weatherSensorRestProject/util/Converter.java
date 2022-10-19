@@ -5,12 +5,14 @@ import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.SensorDTO;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Measurement;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Sensor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class Converter {
     private final ModelMapper modelMapper;
 
+    @Autowired
     public Converter(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
     }

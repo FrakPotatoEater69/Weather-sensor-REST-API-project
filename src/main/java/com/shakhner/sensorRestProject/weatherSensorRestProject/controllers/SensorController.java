@@ -2,14 +2,12 @@ package com.shakhner.sensorRestProject.weatherSensorRestProject.controllers;
 
 import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.LocationWrapperDTO;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.MeasurementDTO;
-import com.shakhner.sensorRestProject.weatherSensorRestProject.services.MeasurementService;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.services.SensorService;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.SensorDTO;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.util.Converter;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.util.exceptions.Response;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.util.exceptions.sensorExceptions.SensorNotCreatedException;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.util.exceptions.sensorExceptions.SensorNotFoundException;
-import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Sensor;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.util.ExceptionInfoCreator;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.util.exceptions.sensorExceptions.SensorNotUpdatedException;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.util.validators.SensorValidator;
@@ -96,21 +94,21 @@ public class SensorController {
 
     @ExceptionHandler(SensorNotCreatedException.class)
     private ResponseEntity<Response> sensorNotCreatedExceptionHandler(SensorNotCreatedException e){
-        Response response = new Response(e.getMessage(), System.currentTimeMillis());
+        Response response = new Response(e.getMessage());
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(SensorNotFoundException.class)
     private ResponseEntity<Response> sensorNotFoundExceptionHandler(SensorNotFoundException e){
-        Response response = new Response("Sensor not found", System.currentTimeMillis());
+        Response response = new Response("Sensor not found");
 
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(SensorNotUpdatedException.class)
     private ResponseEntity<Response> sensorNotUpdatedExceptionHandler(SensorNotUpdatedException e){
-        Response response = new Response(e.getMessage(), System.currentTimeMillis());
+        Response response = new Response(e.getMessage());
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }

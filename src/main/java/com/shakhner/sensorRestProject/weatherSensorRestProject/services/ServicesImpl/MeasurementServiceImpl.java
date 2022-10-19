@@ -4,6 +4,7 @@ import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Measuremen
 import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Sensor;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.services.MeasurementService;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.repositories.MeasurementRepository;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.services.SensorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,10 +17,13 @@ import java.util.Optional;
 public class MeasurementServiceImpl implements MeasurementService {
 
     private final MeasurementRepository measurementRepository;
+    private final SensorService sensorService;
+
 
     @Autowired
-    public MeasurementServiceImpl(MeasurementRepository measurementRepository) {
+    public MeasurementServiceImpl(MeasurementRepository measurementRepository, SensorService sensorService) {
         this.measurementRepository = measurementRepository;
+        this.sensorService = sensorService;
     }
 
     @Override
@@ -43,6 +47,13 @@ public class MeasurementServiceImpl implements MeasurementService {
     @Override
     @Transactional(readOnly = false)
     public void saveMeasurement(Measurement measurement) {
+        Optional<Sensor> sensor = sensorService.getSensorByName(measurement.getSensor().getName());
+
+        measurement.setSensor(sensor.get());
+        sensor.get().getMeasurements().add(measurement);
+
+        measurement.setLocationOfMeasurement(sensor.get().getLocation());
+        //CHECK!!!!!!!!!!!!!!!
         measurementRepository.save(measurement);
     }
 
