@@ -1,9 +1,11 @@
 package com.shakhner.sensorRestProject.weatherSensorRestProject.controllers;
 
 import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.LocationWrapperDTO;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.MeasurementDTO;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.services.MeasurementService;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.services.SensorService;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.SensorDTO;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.util.Converter;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.util.exceptions.Response;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.util.exceptions.sensorExceptions.SensorNotCreatedException;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.util.exceptions.sensorExceptions.SensorNotFoundException;
@@ -27,28 +29,28 @@ import java.util.stream.Collectors;
 @RequestMapping("/sensor")
 public class SensorController {
 
-    private final MeasurementService measurementService;
     private final SensorService sensorService;
     private final SensorValidator sensorValidator;
     private final ModelMapper modelMapper;
+    private final Converter converter;
 
-    public SensorController(MeasurementService measurementService, SensorService sensorService, SensorValidator sensorValidator, ModelMapper modelMapper) {
-        this.measurementService = measurementService;
+    public SensorController(SensorService sensorService, SensorValidator sensorValidator, ModelMapper modelMapper, Converter converter) {
         this.sensorService = sensorService;
         this.sensorValidator = sensorValidator;
         this.modelMapper = modelMapper;
+        this.converter = converter;
     }
 
     @GetMapping
     @ResponseBody
     public List<SensorDTO> findAllSensors(){
-        return sensorService.getAllSensors().stream().map(this::convertToSensorDTO).collect(Collectors.toList());
+        return sensorService.getAllSensors().stream().map(converter::convertToSensorDTO).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     @ResponseBody
     public SensorDTO findOne(@PathVariable("id") int id){
-        return convertToSensorDTO(sensorService.getSensorById(id).get());
+        return converter.convertToSensorDTO(sensorService.getSensorById(id).get());
     }
 
     @PostMapping
@@ -61,7 +63,7 @@ public class SensorController {
             throw new SensorNotCreatedException(ExceptionInfoCreator.getInfo(bindingResult));
         }
 
-        sensorService.saveSensor(convertToSensor(sensorDTO));
+        sensorService.saveSensor(converter.convertToSensor(sensorDTO));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -76,6 +78,13 @@ public class SensorController {
         sensorService.changeLocation(id, locationWrapperDTO.getLocation());
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
+    @GetMapping
+    @RequestMapping("/{id}/measurements")
+    public List<MeasurementDTO> getSensorsMeasurements(@PathVariable("id") int id){
+        return sensorService.getMeasurementsList(id).stream().map(converter::convertToMeasurementDTO).collect(Collectors.toList());
+    }
+
 
     @DeleteMapping("/{id}/delete")
     private ResponseEntity<HttpStatus> deleteSensor(@PathVariable("id") int id){
@@ -104,16 +113,6 @@ public class SensorController {
         Response response = new Response(e.getMessage(), System.currentTimeMillis());
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
-
-
-    private SensorDTO convertToSensorDTO(Sensor sensor){
-        return modelMapper.map(sensor, SensorDTO.class);
-    }
-
-
-    private Sensor convertToSensor(SensorDTO sensorDTO){
-        return modelMapper.map(sensorDTO, Sensor.class);
     }
 
 }
