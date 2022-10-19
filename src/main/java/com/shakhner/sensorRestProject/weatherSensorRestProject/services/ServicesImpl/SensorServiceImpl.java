@@ -1,7 +1,7 @@
-package com.shakhner.sensorRestProject.weatherSensorRestProject.Services.ServicesImpl;
+package com.shakhner.sensorRestProject.weatherSensorRestProject.services.ServicesImpl;
 
-import com.shakhner.sensorRestProject.weatherSensorRestProject.Services.SensorService;
-import com.shakhner.sensorRestProject.weatherSensorRestProject.exceptions.sensorExceptions.SensorNotFoundException;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.services.SensorService;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.util.exceptions.sensorExceptions.SensorNotFoundException;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Measurement;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Sensor;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.repositories.SensorRepository;
@@ -55,6 +55,7 @@ public class SensorServiceImpl implements SensorService {
     @Override
     @Transactional(readOnly = false)
     public void deleteSensorById(int sensor_id) {
+        getSensorById(sensor_id);
         sensorRepository.deleteById(sensor_id);
     }
 
@@ -81,4 +82,11 @@ public class SensorServiceImpl implements SensorService {
     public Optional<Sensor> getSensorByName(String sensorName) {
         return sensorRepository.findByName(sensorName);
     }
+
+    @Transactional(readOnly = false)
+    public void changeLocation(int id, String newLocation){
+        Optional<Sensor> sensor = getSensorById(id);
+        sensor.get().setLocation(newLocation);
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.shakhner.sensorRestProject.weatherSensorRestProject.Services;
+package com.shakhner.sensorRestProject.weatherSensorRestProject.services;
 
 import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Measurement;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Sensor;
@@ -22,4 +22,6 @@ public interface SensorService {
     public List<Sensor> getPageableAndSortedSensorList(Integer page, Integer SensorPerPage, Boolean sortByDate);
 
     public Optional<Sensor> getSensorByName(String SensorName);
+
+    public void changeLocation(int id, String newLocation);
 }

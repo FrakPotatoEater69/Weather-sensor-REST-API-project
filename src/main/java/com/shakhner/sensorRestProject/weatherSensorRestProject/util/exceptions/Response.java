@@ -1,4 +1,4 @@
-package com.shakhner.sensorRestProject.weatherSensorRestProject.exceptions;
+package com.shakhner.sensorRestProject.weatherSensorRestProject.util.exceptions;
 
 public class Response {
     private String message;

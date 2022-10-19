@@ -1,4 +1,4 @@
-package com.shakhner.sensorRestProject.weatherSensorRestProject.Services;
+package com.shakhner.sensorRestProject.weatherSensorRestProject.services;
 
 import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Measurement;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Sensor;

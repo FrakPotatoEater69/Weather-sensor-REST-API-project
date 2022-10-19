@@ -1,8 +1,7 @@
 package com.shakhner.sensorRestProject.weatherSensorRestProject.util.validators;
 
-import com.shakhner.sensorRestProject.weatherSensorRestProject.Services.SensorService;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.services.SensorService;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.SensorDTO;
-import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Sensor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

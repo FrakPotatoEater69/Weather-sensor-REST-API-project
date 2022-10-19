@@ -1,8 +1,8 @@
-package com.shakhner.sensorRestProject.weatherSensorRestProject.Services.ServicesImpl;
+package com.shakhner.sensorRestProject.weatherSensorRestProject.services.ServicesImpl;
 
 import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Measurement;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Sensor;
-import com.shakhner.sensorRestProject.weatherSensorRestProject.Services.MeasurementService;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.services.MeasurementService;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.repositories.MeasurementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

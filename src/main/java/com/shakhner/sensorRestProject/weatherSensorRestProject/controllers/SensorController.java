@@ -1,20 +1,21 @@
 package com.shakhner.sensorRestProject.weatherSensorRestProject.controllers;
 
-import com.shakhner.sensorRestProject.weatherSensorRestProject.Services.MeasurementService;
-import com.shakhner.sensorRestProject.weatherSensorRestProject.Services.SensorService;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.LocationWrapperDTO;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.services.MeasurementService;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.services.SensorService;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.SensorDTO;
-import com.shakhner.sensorRestProject.weatherSensorRestProject.exceptions.Response;
-import com.shakhner.sensorRestProject.weatherSensorRestProject.exceptions.sensorExceptions.SensorNotCreatedException;
-import com.shakhner.sensorRestProject.weatherSensorRestProject.exceptions.sensorExceptions.SensorNotFoundException;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.util.exceptions.Response;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.util.exceptions.sensorExceptions.SensorNotCreatedException;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.util.exceptions.sensorExceptions.SensorNotFoundException;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Sensor;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.util.ExceptionInfoCreator;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.util.exceptions.sensorExceptions.SensorNotUpdatedException;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.util.validators.SensorValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -64,9 +65,23 @@ public class SensorController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-//    @PatchMapping
-//    @RequestMapping("/updatelocation")
-//    public ResponseEntity<HttpStatus>
+    @PatchMapping
+    @RequestMapping("/{id}/updatelocation")
+    public ResponseEntity<HttpStatus> updateLocation(@PathVariable("id") int id, @RequestBody @Valid LocationWrapperDTO locationWrapperDTO,
+                                                     BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            throw new SensorNotUpdatedException(ExceptionInfoCreator.getInfo(bindingResult));
+        }
+
+        sensorService.changeLocation(id, locationWrapperDTO.getLocation());
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}/delete")
+    private ResponseEntity<HttpStatus> deleteSensor(@PathVariable("id") int id){
+        sensorService.deleteSensorById(id);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
 
 
 
@@ -83,6 +98,14 @@ public class SensorController {
 
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(SensorNotUpdatedException.class)
+    private ResponseEntity<Response> sensorNotUpdatedExceptionHandler(SensorNotUpdatedException e){
+        Response response = new Response(e.getMessage(), System.currentTimeMillis());
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
 
     private SensorDTO convertToSensorDTO(Sensor sensor){
         return modelMapper.map(sensor, SensorDTO.class);
