@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "Measurement")
-public class Measurement implements Comparable{
+public class Measurement implements Comparable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "measurement_id")

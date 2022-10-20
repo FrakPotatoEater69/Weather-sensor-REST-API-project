@@ -1,8 +1,6 @@
 package com.shakhner.sensorRestProject.weatherSensorRestProject.controllers;
 
 import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.LocationWrapperDTO;
-import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.MeasurementDTO;
-import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.response.MeasurementResponseBySensor;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.services.SensorService;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.SensorDTO;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.util.Converter;
@@ -42,28 +40,29 @@ public class SensorController {
 
     @GetMapping
     @ResponseBody
-    public List<SensorDTO> findAllSensors(){
-        return sensorService.getAllSensors().stream().map(converter::convertToSensorDTO).collect(Collectors.toList());
+    public List<SensorDTO> findAllSensors() {
+        return sensorService.getAllSensors().stream()
+                .map(converter::convertToSensorDTO).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     @ResponseBody
-    public SensorDTO findOneById(@PathVariable("id") int id){
+    public SensorDTO findOneById(@PathVariable("id") int id) {
         return converter.convertToSensorDTO(sensorService.getSensorById(id).get());
     }
 
     @GetMapping("/findByName")
     @ResponseBody()
-    public SensorDTO findOneByName(@RequestParam("name") String name){
+    public SensorDTO findOneByName(@RequestParam("name") String name) {
         return converter.convertToSensorDTO(sensorService.getSensorByName(name).get());
     }
 
     @PostMapping
     @RequestMapping("/register")
-    public ResponseEntity<HttpStatus> registerSensor(@RequestBody @Valid SensorDTO sensorDTO, BindingResult bindingResult){
+    public ResponseEntity<HttpStatus> registerSensor(@RequestBody @Valid SensorDTO sensorDTO, BindingResult bindingResult) {
 
         sensorValidator.validate(sensorDTO, bindingResult);
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
 
             throw new SensorNotCreatedException(ExceptionInfoCreator.getInfo(bindingResult));
         }
@@ -75,8 +74,8 @@ public class SensorController {
     @PatchMapping
     @RequestMapping("/{name}/updatelocation")
     public ResponseEntity<HttpStatus> updateLocation(@PathVariable("name") String name, @RequestBody @Valid LocationWrapperDTO locationWrapperDTO,
-                                                     BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
+                                                     BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
             throw new SensorNotUpdatedException(ExceptionInfoCreator.getInfo(bindingResult));
         }
 
@@ -86,36 +85,35 @@ public class SensorController {
 
 
     @DeleteMapping("/{id}/delete")
-    private ResponseEntity<HttpStatus> deleteSensor(@PathVariable("id") int id){
+    private ResponseEntity<HttpStatus> deleteSensor(@PathVariable("id") int id) {
         sensorService.deleteSensorById(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
 
-
     @ExceptionHandler(SensorNotCreatedException.class)
-    private ResponseEntity<ExceptionsResponse> sensorNotCreatedExceptionHandler(SensorNotCreatedException e){
+    private ResponseEntity<ExceptionsResponse> sensorNotCreatedExceptionHandler(SensorNotCreatedException e) {
         ExceptionsResponse response = new ExceptionsResponse(e.getMessage());
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(SensorNotFoundException.class)
-    private ResponseEntity<ExceptionsResponse> sensorNotFoundExceptionHandler(SensorNotFoundException e){
+    private ResponseEntity<ExceptionsResponse> sensorNotFoundExceptionHandler(SensorNotFoundException e) {
         ExceptionsResponse response = new ExceptionsResponse("Sensor not found");
 
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(SensorNotUpdatedException.class)
-    private ResponseEntity<ExceptionsResponse> sensorNotUpdatedExceptionHandler(SensorNotUpdatedException e){
+    private ResponseEntity<ExceptionsResponse> sensorNotUpdatedExceptionHandler(SensorNotUpdatedException e) {
         ExceptionsResponse response = new ExceptionsResponse(e.getMessage());
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NumberFormatException.class)
-    private ResponseEntity<ExceptionsResponse> numberFormatExceptionHandler(NumberFormatException e){
+    private ResponseEntity<ExceptionsResponse> numberFormatExceptionHandler(NumberFormatException e) {
         ExceptionsResponse response = new ExceptionsResponse("Input correct sensor id");
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);

@@ -18,6 +18,7 @@ public interface SensorService {
     public void deleteSensorById(int sensor_id);
 
     public List<Measurement> getMeasurementsList(int sensor_id);
+
     public List<Measurement> getMeasurementsList(String name);
 
     public Optional<Sensor> getSensorByName(String SensorName);

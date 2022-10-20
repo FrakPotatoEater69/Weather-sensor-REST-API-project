@@ -33,7 +33,7 @@ public class SensorServiceImpl implements SensorService {
     public Optional<Sensor> getSensorById(int sensor_id) {
         Optional<Sensor> sensor = sensorRepository.findById(sensor_id);
 
-        if(sensor.isEmpty())
+        if (sensor.isEmpty())
             throw new SensorNotFoundException();
 
         return sensor;
@@ -61,7 +61,7 @@ public class SensorServiceImpl implements SensorService {
 
     @Override
     public List<Measurement> getMeasurementsList(int sensor_id) {
-        Optional <Sensor> sensor = getSensorById(sensor_id);
+        Optional<Sensor> sensor = getSensorById(sensor_id);
 
         return sensor.get().getMeasurements();
 
@@ -69,7 +69,7 @@ public class SensorServiceImpl implements SensorService {
 
     @Override
     public List<Measurement> getMeasurementsList(String name) {
-        Optional <Sensor> sensor = getSensorByName(name);
+        Optional<Sensor> sensor = getSensorByName(name);
 
         return sensor.get().getMeasurements();
 
@@ -79,13 +79,13 @@ public class SensorServiceImpl implements SensorService {
     @Override
     public Optional<Sensor> getSensorByName(String sensorName) {
         Optional<Sensor> sensor = sensorRepository.findByName(sensorName);
-        if(sensor.isEmpty())
+        if (sensor.isEmpty())
             throw new SensorNotFoundException();
         return sensor;
     }
 
     @Transactional(readOnly = false)
-    public void changeLocation(String name, String newLocation){
+    public void changeLocation(String name, String newLocation) {
         Optional<Sensor> sensor = getSensorByName(name);
         sensor.get().setLocation(newLocation);
     }

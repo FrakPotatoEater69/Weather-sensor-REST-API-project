@@ -42,11 +42,12 @@ public class MeasurementController {
 
     @PostMapping
     @RequestMapping("/add")
-    public ResponseEntity<HttpStatus> addMeasurement(@RequestBody @Valid MeasurementDTO measurementDTO, BindingResult bindingResult) throws ParseException {
+    public ResponseEntity<HttpStatus> addMeasurement(@RequestBody @Valid MeasurementDTO measurementDTO,
+                                                     BindingResult bindingResult) throws ParseException {
 
         measurementValidator.validate(measurementDTO, bindingResult);
 
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             String errors = ExceptionInfoCreator.getInfo(bindingResult);
 
             throw new MeasurementNotCreatedException(errors);
@@ -57,15 +58,16 @@ public class MeasurementController {
     }
 
     @GetMapping("/getDataForSensorsName")
-    public List<MeasurementResponseBySensor> getMeasurementsBySensor(@RequestParam("sensorId") int sensorId){
+    public List<MeasurementResponseBySensor> getMeasurementsBySensor(@RequestParam("sensorId") int sensorId) {
 
-        return sensorService.getMeasurementsList(sensorId).stream().map(converter::convertToMeasurementResponseBySensor).collect(Collectors.toList());
+        return sensorService.getMeasurementsList(sensorId).stream()
+                .map(converter::convertToMeasurementResponseBySensor).collect(Collectors.toList());
 
     }
 
 
     @GetMapping("/getDataForLocation")
-    public List<MeasurementResponseByLocation> getMeasurementsByLocation(@RequestParam("location") String location){
+    public List<MeasurementResponseByLocation> getMeasurementsByLocation(@RequestParam("location") String location) {
 
         return measurementService.getByLocationOfMeasurement(location).stream().map(converter::convertToMeasurementResponseByLocation).collect(Collectors.toList());
 
@@ -74,25 +76,26 @@ public class MeasurementController {
     @GetMapping("/getDataForLocationAndDate")
     public List<MeasurementResponseByLocation> getMeasurementsByLocationAndDate(@RequestParam("location") String location,
                                                                                 @RequestParam(value = "from") String from,
-                                                                                @RequestParam("to") String to){
-        return measurementService.getDateByLocationBetween(location,from,to).stream().map(converter::convertToMeasurementResponseByLocation).collect(Collectors.toList());
+                                                                                @RequestParam("to") String to) {
+        return measurementService.getDateByLocationBetween(location, from, to).stream()
+                .map(converter::convertToMeasurementResponseByLocation).collect(Collectors.toList());
     }
 
     @ExceptionHandler(MeasurementNotFoundException.class)
-    private ResponseEntity<ExceptionsResponse> measurementNotCreatedExceptionHandler(MeasurementNotFoundException e){
+    private ResponseEntity<ExceptionsResponse> measurementNotCreatedExceptionHandler(MeasurementNotFoundException e) {
         ExceptionsResponse response = new ExceptionsResponse(e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(SensorNotFoundException.class)
-    private ResponseEntity<ExceptionsResponse> sensorNotFoundExceptionHandler(SensorNotFoundException e){
+    private ResponseEntity<ExceptionsResponse> sensorNotFoundExceptionHandler(SensorNotFoundException e) {
         ExceptionsResponse response = new ExceptionsResponse("Sensor not found");
 
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(MeasurementNotCreatedException.class)
-    private ResponseEntity<ExceptionsResponse> measurementNotCreatedExceptionHandler(MeasurementNotCreatedException e){
+    private ResponseEntity<ExceptionsResponse> measurementNotCreatedExceptionHandler(MeasurementNotCreatedException e) {
         ExceptionsResponse response = new ExceptionsResponse(e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }

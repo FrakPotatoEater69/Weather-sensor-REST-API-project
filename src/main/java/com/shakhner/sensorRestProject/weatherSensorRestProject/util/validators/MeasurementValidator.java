@@ -37,12 +37,12 @@ public class MeasurementValidator implements Validator {
     public void validate(Object target, Errors errors) {
         MeasurementDTO measurementDTO = (MeasurementDTO) target;
 
-        if(measurementDTO.getSensor() == null){
+        if (measurementDTO.getSensor() == null) {
             errors.rejectValue("sensor", "", "Input sensor's name");
             return;
         }
 
-        if(measurementDTO.getTimeOfMeasurement() == null || measurementDTO.getTimeOfMeasurement().isBlank()){
+        if (measurementDTO.getTimeOfMeasurement() == null || measurementDTO.getTimeOfMeasurement().isBlank()) {
             errors.rejectValue("timeOfMeasurement", "", "Input time of measurement");
             return;
         }
@@ -50,14 +50,13 @@ public class MeasurementValidator implements Validator {
         Optional<Sensor> sensor = sensorService.getSensorByName(measurementDTO.getSensor().getName());
 
 
-        if(sensor.isEmpty()){
+        if (sensor.isEmpty()) {
             errors.rejectValue("sensor", "", "There is no sensor with this name");
         }
 
-        if(!isValid(measurementDTO)){
+        if (!isValid(measurementDTO)) {
             errors.rejectValue("timeOfMeasurement", "", "Invalid time of measurement, Input time of measurement if format: yyyy-MM-dd'T'HH:mm:ss. Example: 2014-03-12T13:37:27");
         }
-
 
 
     }

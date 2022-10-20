@@ -62,7 +62,7 @@ public class MeasurementServiceImpl implements MeasurementService {
 
     @Override
     public Optional<Sensor> getSensor(int measurement_id) {
-        Measurement measurement = measurementRepository.findById(measurement_id).get()  ;
+        Measurement measurement = measurementRepository.findById(measurement_id).get();
         return Optional.ofNullable(measurement.getSensor());
     }
 
@@ -71,7 +71,7 @@ public class MeasurementServiceImpl implements MeasurementService {
     public List<Measurement> getByLocationOfMeasurement(String location) {
         List<Measurement> measurements = measurementRepository.findByLocationOfMeasurement(location);
 
-        if(measurements.isEmpty()){
+        if (measurements.isEmpty()) {
             throw new MeasurementNotFoundException("There is no measurements in this location or location not found");
         }
 
@@ -82,25 +82,25 @@ public class MeasurementServiceImpl implements MeasurementService {
     public List<Measurement> getDateByLocationBetween(String location, String from, String to) {
         List<Measurement> measurements = getByLocationOfMeasurement(location);
 
-        if(to.isBlank() || from.isBlank())
+        if (to.isBlank() || from.isBlank())
             throw new MeasurementNotFoundException("Input from and to dates value");
         Date dateFrom = convertToDate(from);
         Date dateTo = convertToDate(to);
 
 
-        if(measurements.isEmpty()){
+        if (measurements.isEmpty()) {
             throw new MeasurementNotFoundException("There is no measurements in this location between this dates");
         }
 
         List<Measurement> necessaryMeasurements = new ArrayList<>();
 
-        for(Measurement measurement : measurements){
-            if(measurement.getTimeOfMeasurement().after(dateFrom) && measurement.getTimeOfMeasurement().before(dateTo))
+        for (Measurement measurement : measurements) {
+            if (measurement.getTimeOfMeasurement().after(dateFrom) && measurement.getTimeOfMeasurement().before(dateTo))
                 necessaryMeasurements.add(measurement);
         }
 
 
-        if(necessaryMeasurements.isEmpty()){
+        if (necessaryMeasurements.isEmpty()) {
             throw new MeasurementNotFoundException("There is no measurements in this location between this dates");
         }
 
@@ -109,19 +109,19 @@ public class MeasurementServiceImpl implements MeasurementService {
         return necessaryMeasurements;
     }
 
-    private Date convertToDate(String date){
+    private Date convertToDate(String date) {
 
-            DateFormat pattern = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        DateFormat pattern = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
-            pattern.setLenient(false);
-            Date validDate;
-            try {
-                validDate = pattern.parse(date);
-            } catch (ParseException e) {
-                throw new MeasurementNotFoundException("Invalid date type, example: 2017-12-02T17:23:27");
-            }
+        pattern.setLenient(false);
+        Date validDate;
+        try {
+            validDate = pattern.parse(date);
+        } catch (ParseException e) {
+            throw new MeasurementNotFoundException("Invalid date type, example: 2017-12-02T17:23:27");
+        }
 
-            return validDate;
+        return validDate;
     }
 
 

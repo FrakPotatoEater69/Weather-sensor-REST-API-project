@@ -24,27 +24,28 @@ public class Converter {
         this.modelMapper = modelMapper;
     }
 
-    public SensorDTO convertToSensorDTO(Sensor sensor){
+    public SensorDTO convertToSensorDTO(Sensor sensor) {
         return modelMapper.map(sensor, SensorDTO.class);
     }
 
 
-    public Sensor convertToSensor(SensorDTO sensorDTO){
+    public Sensor convertToSensor(SensorDTO sensorDTO) {
         return modelMapper.map(sensorDTO, Sensor.class);
     }
 
-    public MeasurementResponseBySensor convertToMeasurementResponseBySensor(Measurement measurement){
+    public MeasurementResponseBySensor convertToMeasurementResponseBySensor(Measurement measurement) {
         return modelMapper.map(measurement, MeasurementResponseBySensor.class);
     }
 
-    public MeasurementResponseByLocation convertToMeasurementResponseByLocation(Measurement measurement){
+    public MeasurementResponseByLocation convertToMeasurementResponseByLocation(Measurement measurement) {
         return modelMapper.map(measurement, MeasurementResponseByLocation.class);
     }
-    public SensorResponse convertToSensorResponse(Sensor sensor){
+
+    public SensorResponse convertToSensorResponse(Sensor sensor) {
         return modelMapper.map(sensor, SensorResponse.class);
     }
 
-    public MeasurementDTO convertToMeasurementDTO(Measurement measurement){
+    public MeasurementDTO convertToMeasurementDTO(Measurement measurement) {
 
         MeasurementDTO measurementDTO = new MeasurementDTO();
         measurementDTO.setSensor(measurement.getSensor());
