@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "Measurement")
-public class Measurement {
+public class Measurement implements Comparable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "measurement_id")
@@ -97,5 +97,12 @@ public class Measurement {
 
     public void setTimeOfMeasurement(Date timeOfMeasurement) {
         this.timeOfMeasurement = timeOfMeasurement;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Measurement measurement = (Measurement) o;
+
+        return measurement.getTimeOfMeasurement().compareTo(this.getTimeOfMeasurement());
     }
 }

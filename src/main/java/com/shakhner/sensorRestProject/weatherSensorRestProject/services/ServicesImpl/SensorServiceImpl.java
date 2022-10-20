@@ -61,31 +61,32 @@ public class SensorServiceImpl implements SensorService {
 
     @Override
     public List<Measurement> getMeasurementsList(int sensor_id) {
-        Optional <Sensor> sensor = sensorRepository.findById(sensor_id);
+        Optional <Sensor> sensor = getSensorById(sensor_id);
 
-        if(sensor.isPresent()){
-            Hibernate.initialize(sensor.get().getMeasurements());
-            return sensor.get().getMeasurements();
-        }
+        return sensor.get().getMeasurements();
 
-        //TODO throw exception
-        return null;
     }
 
     @Override
-    public List<Sensor> getPageableAndSortedSensorList(Integer page, Integer SensorPerPage, Boolean sortByDate) {
-        //TODO
-        return null;
+    public List<Measurement> getMeasurementsList(String name) {
+        Optional <Sensor> sensor = getSensorByName(name);
+
+        return sensor.get().getMeasurements();
+
     }
+
 
     @Override
     public Optional<Sensor> getSensorByName(String sensorName) {
-        return sensorRepository.findByName(sensorName);
+        Optional<Sensor> sensor = sensorRepository.findByName(sensorName);
+        if(sensor.isEmpty())
+            throw new SensorNotFoundException();
+        return sensor;
     }
 
     @Transactional(readOnly = false)
-    public void changeLocation(int id, String newLocation){
-        Optional<Sensor> sensor = getSensorById(id);
+    public void changeLocation(String name, String newLocation){
+        Optional<Sensor> sensor = getSensorByName(name);
         sensor.get().setLocation(newLocation);
     }
 

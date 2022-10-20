@@ -5,12 +5,15 @@ import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Sensor;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.services.MeasurementService;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.repositories.MeasurementRepository;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.services.SensorService;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.util.exceptions.MeasurementExceprions.MeasurementNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -37,12 +40,6 @@ public class MeasurementServiceImpl implements MeasurementService {
         return measurementRepository.findById(measurement_id);
     }
 
-    @Override
-    @Transactional(readOnly = false)
-    public void updateMeasurement(int id, Measurement measurement) {
-        measurement.setId(id);
-        measurementRepository.save(measurement);
-    }
 
     @Override
     @Transactional(readOnly = false)
@@ -69,9 +66,63 @@ public class MeasurementServiceImpl implements MeasurementService {
         return Optional.ofNullable(measurement.getSensor());
     }
 
+
     @Override
-    public List<Measurement> getPageableAndSortedMeasurementList(Integer page, Integer MeasurementPerPage, Boolean sortByDate) {
-        //TODO
-        return null;
+    public List<Measurement> getByLocationOfMeasurement(String location) {
+        List<Measurement> measurements = measurementRepository.findByLocationOfMeasurement(location);
+
+        if(measurements.isEmpty()){
+            throw new MeasurementNotFoundException("There is no measurements in this location or location not found");
+        }
+
+        return measurements;
     }
+
+    @Override
+    public List<Measurement> getDateByLocationBetween(String location, String from, String to) {
+        List<Measurement> measurements = getByLocationOfMeasurement(location);
+
+        if(to.isBlank() || from.isBlank())
+            throw new MeasurementNotFoundException("Input from and to dates value");
+        Date dateFrom = convertToDate(from);
+        Date dateTo = convertToDate(to);
+
+
+        if(measurements.isEmpty()){
+            throw new MeasurementNotFoundException("There is no measurements in this location between this dates");
+        }
+
+        List<Measurement> necessaryMeasurements = new ArrayList<>();
+
+        for(Measurement measurement : measurements){
+            if(measurement.getTimeOfMeasurement().after(dateFrom) && measurement.getTimeOfMeasurement().before(dateTo))
+                necessaryMeasurements.add(measurement);
+        }
+
+
+        if(necessaryMeasurements.isEmpty()){
+            throw new MeasurementNotFoundException("There is no measurements in this location between this dates");
+        }
+
+        necessaryMeasurements.sort(Comparator.naturalOrder());
+
+        return necessaryMeasurements;
+    }
+
+    private Date convertToDate(String date){
+
+            DateFormat pattern = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+            pattern.setLenient(false);
+            Date validDate;
+            try {
+                validDate = pattern.parse(date);
+            } catch (ParseException e) {
+                throw new MeasurementNotFoundException("Invalid date type, example: 2017-12-02T17:23:27");
+            }
+
+            return validDate;
+    }
+
+
 }

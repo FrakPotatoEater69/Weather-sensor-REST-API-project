@@ -18,10 +18,10 @@ public interface SensorService {
     public void deleteSensorById(int sensor_id);
 
     public List<Measurement> getMeasurementsList(int sensor_id);
-
-    public List<Sensor> getPageableAndSortedSensorList(Integer page, Integer SensorPerPage, Boolean sortByDate);
+    public List<Measurement> getMeasurementsList(String name);
 
     public Optional<Sensor> getSensorByName(String SensorName);
 
-    public void changeLocation(int id, String newLocation);
+    public void changeLocation(String name, String newLocation);
+
 }

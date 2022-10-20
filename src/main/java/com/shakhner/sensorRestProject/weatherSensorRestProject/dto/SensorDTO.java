@@ -11,13 +11,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class SensorDTO {
-
     @NotEmpty(message = "name of sensor should not be empty")
     @Size(min = 3, max = 30, message = "sensor name should be between 3 and 30 characters")
     private String name;
 
     @Size(min = 3, max = 30, message = "location name should be between 3 and 30 characters")
+    @NotEmpty(message = "name of location should not be empty")
     private String location;
+
 
     public String getName() {
         return name;
@@ -34,5 +35,4 @@ public class SensorDTO {
     public void setLocation(String location) {
         this.location = location;
     }
-
 }

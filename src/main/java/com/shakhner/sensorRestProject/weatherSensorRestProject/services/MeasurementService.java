@@ -3,21 +3,22 @@ package com.shakhner.sensorRestProject.weatherSensorRestProject.services;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Measurement;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Sensor;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 public interface MeasurementService {
-    public List<Measurement> getAllMeasurements();
+    List<Measurement> getAllMeasurements();
 
-    public Optional<Measurement> getMeasurementById(int measurement_id);
+    Optional<Measurement> getMeasurementById(int measurement_id);
 
-    public void updateMeasurement(int id, Measurement measurement);
+    void saveMeasurement(Measurement measurement);
 
-    public void saveMeasurement(Measurement measurement);
+    void deleteMeasurementById(int measurement_id);
 
-    public void deleteMeasurementById(int measurement_id);
+    Optional<Sensor> getSensor(int measurement_id);
 
-    public Optional<Sensor> getSensor(int measurement_id);
+    List<Measurement> getByLocationOfMeasurement(String location);
 
-    public List<Measurement> getPageableAndSortedMeasurementList(Integer page, Integer MeasurementPerPage, Boolean sortByDate);
+    List<Measurement> getDateByLocationBetween(String location, String from, String to);
 }

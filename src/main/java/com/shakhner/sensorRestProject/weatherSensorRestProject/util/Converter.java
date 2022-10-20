@@ -2,6 +2,9 @@ package com.shakhner.sensorRestProject.weatherSensorRestProject.util;
 
 import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.MeasurementDTO;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.SensorDTO;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.response.MeasurementResponseByLocation;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.response.MeasurementResponseBySensor;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.response.SensorResponse;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Measurement;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Sensor;
 import org.modelmapper.ModelMapper;
@@ -30,14 +33,27 @@ public class Converter {
         return modelMapper.map(sensorDTO, Sensor.class);
     }
 
+    public MeasurementResponseBySensor convertToMeasurementResponseBySensor(Measurement measurement){
+        return modelMapper.map(measurement, MeasurementResponseBySensor.class);
+    }
+
+    public MeasurementResponseByLocation convertToMeasurementResponseByLocation(Measurement measurement){
+        return modelMapper.map(measurement, MeasurementResponseByLocation.class);
+    }
+    public SensorResponse convertToSensorResponse(Sensor sensor){
+        return modelMapper.map(sensor, SensorResponse.class);
+    }
+
     public MeasurementDTO convertToMeasurementDTO(Measurement measurement){
 
         MeasurementDTO measurementDTO = new MeasurementDTO();
         measurementDTO.setSensor(measurement.getSensor());
+
         measurementDTO.setTimeOfMeasurement(measurement.getTimeOfMeasurement().toString());
         measurementDTO.setRaining(measurement.getRaining());
         measurementDTO.setWindSpeed(measurement.getWindSpeed());
         measurementDTO.setTemperatureValue(measurement.getTemperatureValue());
+        measurementDTO.setLocationOfMeasurement(measurement.getLocationOfMeasurement());
 
         return measurementDTO;
     }

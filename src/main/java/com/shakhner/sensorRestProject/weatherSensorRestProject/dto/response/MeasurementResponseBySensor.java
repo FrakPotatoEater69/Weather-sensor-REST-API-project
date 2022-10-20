@@ -1,11 +1,10 @@
-package com.shakhner.sensorRestProject.weatherSensorRestProject.dto;
+package com.shakhner.sensorRestProject.weatherSensorRestProject.dto.response;
 
-import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Sensor;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
-import javax.validation.constraints.*;
-
-public class MeasurementDTO {
-
+public class MeasurementResponseBySensor {
     @Min(value = -100, message = "minimum temperature value is -100")
     @Max(value = 100, message = "maximum temperature value is -100")
     @NotNull(message = "Temperature value should not be empty")
@@ -22,7 +21,6 @@ public class MeasurementDTO {
 
     private String timeOfMeasurement;
 
-    private Sensor sensor;
 
     public Double getTemperatureValue() {
         return temperatureValue;
@@ -48,14 +46,6 @@ public class MeasurementDTO {
         this.windSpeed = windSpeed;
     }
 
-    public Sensor getSensor() {
-        return sensor;
-    }
-
-    public void setSensor(Sensor sensor) {
-        this.sensor = sensor;
-    }
-
     public String getTimeOfMeasurement() {
         return timeOfMeasurement;
     }
@@ -71,6 +61,4 @@ public class MeasurementDTO {
     public void setLocationOfMeasurement(String locationOfMeasurement) {
         this.locationOfMeasurement = locationOfMeasurement;
     }
-
-
 }

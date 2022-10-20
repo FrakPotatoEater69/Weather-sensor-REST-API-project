@@ -1,12 +1,16 @@
 package com.shakhner.sensorRestProject.weatherSensorRestProject.controllers;
 
 import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.MeasurementDTO;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.response.MeasurementResponseByLocation;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.response.MeasurementResponseBySensor;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.services.MeasurementService;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.services.SensorService;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.util.Converter;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.util.ExceptionInfoCreator;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.util.exceptions.MeasurementExceprions.MeasurementNotCreatedException;
-import com.shakhner.sensorRestProject.weatherSensorRestProject.util.exceptions.Response;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.util.exceptions.MeasurementExceprions.MeasurementNotFoundException;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.util.exceptions.ExceptionsResponse;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.util.exceptions.sensorExceptions.SensorNotFoundException;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.util.validators.MeasurementValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.text.ParseException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/measurement")
@@ -51,20 +56,45 @@ public class MeasurementController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @GetMapping("/getbysensor")
-    public List<MeasurementDTO> getMeasurementsBySensor(@RequestParam("sensorId") int SensorId){
-        return null;
+    @GetMapping("/getDataForSensorsName")
+    public List<MeasurementResponseBySensor> getMeasurementsBySensor(@RequestParam("sensorId") int sensorId){
+
+        return sensorService.getMeasurementsList(sensorId).stream().map(converter::convertToMeasurementResponseBySensor).collect(Collectors.toList());
+
     }
 
 
+    @GetMapping("/getDataForLocation")
+    public List<MeasurementResponseByLocation> getMeasurementsByLocation(@RequestParam("location") String location){
 
-    @ExceptionHandler(MeasurementNotCreatedException.class)
-    private ResponseEntity<Response> measurementNotCreatedExceptionHandler(MeasurementNotCreatedException e){
-        Response response = new Response(e.getMessage());
+        return measurementService.getByLocationOfMeasurement(location).stream().map(converter::convertToMeasurementResponseByLocation).collect(Collectors.toList());
+
+    }
+
+    @GetMapping("/getDataForLocationAndDate")
+    public List<MeasurementResponseByLocation> getMeasurementsByLocationAndDate(@RequestParam("location") String location,
+                                                                                @RequestParam(value = "from") String from,
+                                                                                @RequestParam("to") String to){
+        return measurementService.getDateByLocationBetween(location,from,to).stream().map(converter::convertToMeasurementResponseByLocation).collect(Collectors.toList());
+    }
+
+    @ExceptionHandler(MeasurementNotFoundException.class)
+    private ResponseEntity<ExceptionsResponse> measurementNotCreatedExceptionHandler(MeasurementNotFoundException e){
+        ExceptionsResponse response = new ExceptionsResponse(e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(SensorNotFoundException.class)
+    private ResponseEntity<ExceptionsResponse> sensorNotFoundExceptionHandler(SensorNotFoundException e){
+        ExceptionsResponse response = new ExceptionsResponse("Sensor not found");
 
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
 
+    @ExceptionHandler(MeasurementNotCreatedException.class)
+    private ResponseEntity<ExceptionsResponse> measurementNotCreatedExceptionHandler(MeasurementNotCreatedException e){
+        ExceptionsResponse response = new ExceptionsResponse(e.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 
 }

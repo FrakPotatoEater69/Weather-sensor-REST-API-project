@@ -1,10 +1,10 @@
 package com.shakhner.sensorRestProject.weatherSensorRestProject.util.exceptions;
 
-public class Response {
+public class ExceptionsResponse {
     private String message;
     private long timestamp;
 
-    public Response(String message) {
+    public ExceptionsResponse(String message) {
         this.message = message;
         this.timestamp = System.currentTimeMillis();
     }
