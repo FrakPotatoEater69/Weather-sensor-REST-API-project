@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 
 @Entity
@@ -31,6 +33,10 @@ public class Measurement {
 
     @Column(name = "location_of_measurement")
     private String locationOfMeasurement;
+
+    @Column(name = "time_of_measurement")
+    @NotNull(message = "Input time of measurement")
+    private Date timeOfMeasurement;
 
     @ManyToOne
     @JoinColumn(name = "sensor_id", referencedColumnName = "sensor_id")
@@ -83,5 +89,13 @@ public class Measurement {
 
     public void setLocationOfMeasurement(String locationOfMeasurement) {
         this.locationOfMeasurement = locationOfMeasurement;
+    }
+
+    public Date getTimeOfMeasurement() {
+        return timeOfMeasurement;
+    }
+
+    public void setTimeOfMeasurement(Date timeOfMeasurement) {
+        this.timeOfMeasurement = timeOfMeasurement;
     }
 }

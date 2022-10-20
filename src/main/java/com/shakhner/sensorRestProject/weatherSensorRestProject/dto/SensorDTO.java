@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class SensorDTO {
@@ -17,7 +18,6 @@ public class SensorDTO {
 
     @Size(min = 3, max = 30, message = "location name should be between 3 and 30 characters")
     private String location;
-
 
     public String getName() {
         return name;

@@ -28,6 +28,5 @@ public class SensorValidator implements Validator {
         if(sensorService.getSensorByName(sensorName).isPresent()){
             errors.rejectValue("name", "", "Sensor with this name is already exist");
         }
-
     }
 }
