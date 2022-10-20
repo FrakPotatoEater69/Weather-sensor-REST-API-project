@@ -8,6 +8,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 @Component
 public class Converter {
     private final ModelMapper modelMapper;
@@ -27,10 +31,27 @@ public class Converter {
     }
 
     public MeasurementDTO convertToMeasurementDTO(Measurement measurement){
-        return modelMapper.map(measurement, MeasurementDTO.class);
+
+        MeasurementDTO measurementDTO = new MeasurementDTO();
+        measurementDTO.setSensor(measurement.getSensor());
+        measurementDTO.setTimeOfMeasurement(measurement.getTimeOfMeasurement().toString());
+        measurementDTO.setRaining(measurement.getRaining());
+        measurementDTO.setWindSpeed(measurement.getWindSpeed());
+        measurementDTO.setTemperatureValue(measurement.getTemperatureValue());
+
+        return measurementDTO;
     }
 
-    public Measurement convertToMeasurement(MeasurementDTO measurementDTO){
+    public Measurement convertToMeasurement(MeasurementDTO measurementDTO) throws ParseException {
+        Measurement measurement = new Measurement();
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        measurement.setTimeOfMeasurement(dateFormat.parse(measurementDTO.getTimeOfMeasurement()));
+
+        measurement.setSensor(measurementDTO.getSensor());
+        measurement.setRaining(measurementDTO.getRaining());
+        measurement.setTemperatureValue(measurementDTO.getTemperatureValue());
+        measurement.setWindSpeed(measurementDTO.getWindSpeed());
         return modelMapper.map(measurementDTO, Measurement.class);
     }
 }

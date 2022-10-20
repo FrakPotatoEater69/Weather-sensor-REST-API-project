@@ -1,18 +1,8 @@
 package com.shakhner.sensorRestProject.weatherSensorRestProject.dto;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.models.Sensor;
-import com.shakhner.sensorRestProject.weatherSensorRestProject.util.exceptions.MeasurementExceprions.MeasurementNotCreatedException;
-import org.springframework.boot.json.JsonParseException;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 
-import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
-import java.util.Date;
 
 public class MeasurementDTO {
 
@@ -28,10 +18,9 @@ public class MeasurementDTO {
     @Max(value = 140, message = "maximum value of wind speed is 140")
     private Double windSpeed;
 
-    @NotNull(message = "Input time of measurement")
-    private String stringTimeOfMeasurement;
+    private String timeOfMeasurement;
 
-    private Date timeOfMeasurement;
+//    private Date timeOfMeasurement;
     private Sensor sensor;
 
     public Double getTemperatureValue() {
@@ -66,19 +55,19 @@ public class MeasurementDTO {
         this.sensor = sensor;
     }
 
-    public String getStringTimeOfMeasurement() {
-        return stringTimeOfMeasurement;
-    }
-
-    public void setStringTimeOfMeasurement(String stringTimeOfMeasurement) {
-        this.stringTimeOfMeasurement = stringTimeOfMeasurement;
-    }
-
-    public Date getTimeOfMeasurement() {
+    public String getTimeOfMeasurement() {
         return timeOfMeasurement;
     }
 
-    public void setTimeOfMeasurement(Date timeOfMeasurement) {
+    public void setTimeOfMeasurement(String timeOfMeasurement) {
         this.timeOfMeasurement = timeOfMeasurement;
     }
+
+//    public Date getTimeOfMeasurement() {
+//        return timeOfMeasurement;
+//    }
+//
+//    public void setTimeOfMeasurement(Date timeOfMeasurement) {
+//        this.timeOfMeasurement = timeOfMeasurement;
+//    }
 }

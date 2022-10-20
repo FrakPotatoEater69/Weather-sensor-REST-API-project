@@ -42,6 +42,11 @@ public class MeasurementValidator implements Validator {
             return;
         }
 
+        if(measurementDTO.getTimeOfMeasurement() == null || measurementDTO.getTimeOfMeasurement().isBlank()){
+            errors.rejectValue("timeOfMeasurement", "", "Input time of measurement");
+            return;
+        }
+
         Optional<Sensor> sensor = sensorService.getSensorByName(measurementDTO.getSensor().getName());
 
 
@@ -62,7 +67,7 @@ public class MeasurementValidator implements Validator {
         sdf.setLenient(false);
 
         try {
-            measurementDTO.setTimeOfMeasurement(sdf.parse(measurementDTO.getStringTimeOfMeasurement()));
+            sdf.parse(measurementDTO.getTimeOfMeasurement());
         } catch (ParseException e) {
             return false;
         }

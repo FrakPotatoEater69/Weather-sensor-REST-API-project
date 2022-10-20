@@ -15,6 +15,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.ParseException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/measurement")
@@ -35,7 +37,7 @@ public class MeasurementController {
 
     @PostMapping
     @RequestMapping("/add")
-    public ResponseEntity<HttpStatus> addMeasurement(@RequestBody @Valid MeasurementDTO measurementDTO, BindingResult bindingResult){
+    public ResponseEntity<HttpStatus> addMeasurement(@RequestBody @Valid MeasurementDTO measurementDTO, BindingResult bindingResult) throws ParseException {
 
         measurementValidator.validate(measurementDTO, bindingResult);
 
@@ -48,6 +50,13 @@ public class MeasurementController {
         measurementService.saveMeasurement(converter.convertToMeasurement(measurementDTO));
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
+    @GetMapping("/getbysensor")
+    public List<MeasurementDTO> getMeasurementsBySensor(@RequestParam("sensorId") int SensorId){
+        return null;
+    }
+
+
 
     @ExceptionHandler(MeasurementNotCreatedException.class)
     private ResponseEntity<Response> measurementNotCreatedExceptionHandler(MeasurementNotCreatedException e){

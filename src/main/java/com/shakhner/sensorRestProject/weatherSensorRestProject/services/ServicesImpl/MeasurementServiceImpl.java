@@ -53,7 +53,7 @@ public class MeasurementServiceImpl implements MeasurementService {
         sensor.get().getMeasurements().add(measurement);
 
         measurement.setLocationOfMeasurement(sensor.get().getLocation());
-        //CHECK!!!!!!!!!!!!!!!
+
         measurementRepository.save(measurement);
     }
 
