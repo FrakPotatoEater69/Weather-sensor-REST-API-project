@@ -6,6 +6,7 @@ import com.shakhner.sensorRestProject.weatherSensorRestProject.services.Measurem
 import com.shakhner.sensorRestProject.weatherSensorRestProject.repositories.MeasurementRepository;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.services.SensorService;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.util.exceptions.MeasurementExceprions.MeasurementNotFoundException;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.util.exceptions.sensorExceptions.SensorNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -107,6 +108,23 @@ public class MeasurementServiceImpl implements MeasurementService {
         necessaryMeasurements.sort(Comparator.naturalOrder());
 
         return necessaryMeasurements;
+    }
+
+    @Override
+    public Integer getRainyDaysCountForLocation(String location) {
+        if(measurementRepository.findByLocationOfMeasurement(location).isEmpty()){
+            throw new MeasurementNotFoundException("There is not measurements in this location");
+        };
+        return measurementRepository.findMeasurementsByRainingAndLocationOfMeasurement(true, location).size();
+    }
+
+    @Override
+    public Integer getRainyDaysCountForSensorsName(String name) {
+
+        if(sensorService.getSensorByName(name).isEmpty())
+            throw new SensorNotFoundException();
+
+        return measurementRepository.findMeasurementsByRainingAndSensor_Name(true, name).size();
     }
 
     private Date convertToDate(String date) {

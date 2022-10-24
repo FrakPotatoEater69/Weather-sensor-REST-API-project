@@ -1,6 +1,7 @@
 package com.shakhner.sensorRestProject.weatherSensorRestProject.controllers;
 
 import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.LocationWrapperDTO;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.response.responseListWrappers.SensorsDTOResponse;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.services.SensorService;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.SensorDTO;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.util.Converter;
@@ -18,7 +19,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
@@ -40,9 +40,9 @@ public class SensorController {
 
     @GetMapping
     @ResponseBody
-    public List<SensorDTO> findAllSensors() {
-        return sensorService.getAllSensors().stream()
-                .map(converter::convertToSensorDTO).collect(Collectors.toList());
+    public SensorsDTOResponse findAllSensors() {
+        return new SensorsDTOResponse(sensorService.getAllSensors().stream()
+                .map(converter::convertToSensorDTO).collect(Collectors.toList()));
     }
 
     @GetMapping("/{id}")
@@ -54,7 +54,8 @@ public class SensorController {
     @GetMapping("/findByName")
     @ResponseBody()
     public SensorDTO findOneByName(@RequestParam("name") String name) {
-        return converter.convertToSensorDTO(sensorService.getSensorByName(name).get());
+        return sensorService.getSensorByName(name).stream().map(converter::convertToSensorDTO)
+                .findAny().orElseThrow(() -> new SensorNotFoundException());
     }
 
     @PostMapping
@@ -84,9 +85,9 @@ public class SensorController {
     }
 
 
-    @DeleteMapping("/{id}/delete")
-    private ResponseEntity<HttpStatus> deleteSensor(@PathVariable("id") int id) {
-        sensorService.deleteSensorById(id);
+    @DeleteMapping("/{name}/delete")
+    private ResponseEntity<HttpStatus> deleteSensor(@PathVariable("name") String name) {
+        sensorService.deleteSensorByName(name);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

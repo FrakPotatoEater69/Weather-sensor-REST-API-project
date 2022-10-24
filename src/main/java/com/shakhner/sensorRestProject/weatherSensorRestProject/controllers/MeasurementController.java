@@ -3,6 +3,8 @@ package com.shakhner.sensorRestProject.weatherSensorRestProject.controllers;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.MeasurementDTO;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.response.MeasurementResponseByLocation;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.response.MeasurementResponseBySensor;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.response.responseListWrappers.MeasurementsByLocationResponse;
+import com.shakhner.sensorRestProject.weatherSensorRestProject.dto.response.responseListWrappers.MeasurementsBySensorResponse;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.services.MeasurementService;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.services.SensorService;
 import com.shakhner.sensorRestProject.weatherSensorRestProject.util.Converter;
@@ -58,27 +60,39 @@ public class MeasurementController {
     }
 
     @GetMapping("/getDataForSensorsName")
-    public List<MeasurementResponseBySensor> getMeasurementsBySensor(@RequestParam("sensorId") int sensorId) {
+    public MeasurementsBySensorResponse getMeasurementsBySensor(@RequestParam("sensorId") int sensorId) {
 
-        return sensorService.getMeasurementsList(sensorId).stream()
-                .map(converter::convertToMeasurementResponseBySensor).collect(Collectors.toList());
+        return new MeasurementsBySensorResponse(sensorService.getMeasurementsList(sensorId).stream()
+                .map(converter::convertToMeasurementResponseBySensor).collect(Collectors.toList()));
 
     }
 
 
     @GetMapping("/getDataForLocation")
-    public List<MeasurementResponseByLocation> getMeasurementsByLocation(@RequestParam("location") String location) {
+    public MeasurementsByLocationResponse getMeasurementsByLocation(@RequestParam("location") String location) {
 
-        return measurementService.getByLocationOfMeasurement(location).stream().map(converter::convertToMeasurementResponseByLocation).collect(Collectors.toList());
+        return new MeasurementsByLocationResponse(measurementService.getByLocationOfMeasurement(location).stream()
+                .map(converter::convertToMeasurementResponseByLocation).collect(Collectors.toList()));
 
     }
 
+    @GetMapping("/getRainyDaysCountForLocation")
+    public Integer getRainyDaysCountForLocation(@RequestParam("location") String location) {
+        return measurementService.getRainyDaysCountForLocation(location);
+    }
+
+    @GetMapping("/getRainyDaysCountForSensorsName")
+    public Integer getRainyDaysCountForSensorsName(@RequestParam("name") String name) {
+        return measurementService.getRainyDaysCountForSensorsName(name);
+    }
+
+
     @GetMapping("/getDataForLocationAndDate")
-    public List<MeasurementResponseByLocation> getMeasurementsByLocationAndDate(@RequestParam("location") String location,
-                                                                                @RequestParam(value = "from") String from,
+    public MeasurementsByLocationResponse getMeasurementsByLocationAndDate(@RequestParam("location") String location,
+                                                                                @RequestParam("from") String from,
                                                                                 @RequestParam("to") String to) {
-        return measurementService.getDateByLocationBetween(location, from, to).stream()
-                .map(converter::convertToMeasurementResponseByLocation).collect(Collectors.toList());
+        return new MeasurementsByLocationResponse(measurementService.getDateByLocationBetween(location, from, to).stream()
+                .map(converter::convertToMeasurementResponseByLocation).collect(Collectors.toList()));
     }
 
     @ExceptionHandler(MeasurementNotFoundException.class)

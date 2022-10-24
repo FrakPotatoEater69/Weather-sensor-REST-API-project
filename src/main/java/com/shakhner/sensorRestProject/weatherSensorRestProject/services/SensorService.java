@@ -25,4 +25,6 @@ public interface SensorService {
 
     public void changeLocation(String name, String newLocation);
 
+    public void deleteSensorByName(String name);
+
 }

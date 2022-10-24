@@ -9,4 +9,8 @@ import java.util.List;
 @Repository
 public interface MeasurementRepository extends JpaRepository<Measurement, Integer> {
     List<Measurement> findByLocationOfMeasurement(String location);
+
+    List<Measurement> findMeasurementsByRainingAndLocationOfMeasurement(Boolean isRaining, String location);
+
+    List<Measurement> findMeasurementsByRainingAndSensor_Name(Boolean isRaining, String location);
 }

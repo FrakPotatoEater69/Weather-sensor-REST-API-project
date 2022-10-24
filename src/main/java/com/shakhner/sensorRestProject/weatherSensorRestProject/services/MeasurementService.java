@@ -21,4 +21,10 @@ public interface MeasurementService {
     List<Measurement> getByLocationOfMeasurement(String location);
 
     List<Measurement> getDateByLocationBetween(String location, String from, String to);
+
+    Integer getRainyDaysCountForLocation (String location);
+
+    Integer getRainyDaysCountForSensorsName (String name);
+
+
 }

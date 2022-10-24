@@ -25,8 +25,12 @@ public class SensorValidator implements Validator {
     public void validate(Object target, Errors errors) {
         String sensorName = ((SensorDTO) target).getName();
 
-        if (sensorService.getSensorByName(sensorName).isPresent()) {
+        if (sensorService.getSensorByName(sensorName).isPresent())
             errors.rejectValue("name", "", "Sensor with this name is already exist");
-        }
+
+
+        if(sensorName.isBlank())
+            errors.rejectValue("name", "", "The sensor name cannot be empty or contain only spaces");
+
     }
 }
