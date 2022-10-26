@@ -105,6 +105,12 @@ public class SensorServiceImpl implements SensorService {
         if(sensor.isEmpty())
             throw new SensorNotFoundException();
 
+        List<Measurement> measurements = getMeasurementsList(name);
+
+        for (Measurement measurement : measurements){
+            measurement.setSensor(null);
+        }
+
         sensorRepository.deleteSensorByName(name);
     }
 

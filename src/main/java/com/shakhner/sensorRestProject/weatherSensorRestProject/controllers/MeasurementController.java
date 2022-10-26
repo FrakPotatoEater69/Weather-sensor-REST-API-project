@@ -60,9 +60,9 @@ public class MeasurementController {
     }
 
     @GetMapping("/getDataForSensorsName")
-    public MeasurementsBySensorResponse getMeasurementsBySensor(@RequestParam("sensorId") int sensorId) {
+    public MeasurementsBySensorResponse getMeasurementsBySensor(@RequestParam("sensorName") String sensorName) {
 
-        return new MeasurementsBySensorResponse(sensorService.getMeasurementsList(sensorId).stream()
+        return new MeasurementsBySensorResponse(sensorService.getMeasurementsList(sensorName).stream()
                 .map(converter::convertToMeasurementResponseBySensor).collect(Collectors.toList()));
 
     }
@@ -91,6 +91,7 @@ public class MeasurementController {
     public MeasurementsByLocationResponse getMeasurementsByLocationAndDate(@RequestParam("location") String location,
                                                                                 @RequestParam("from") String from,
                                                                                 @RequestParam("to") String to) {
+
         return new MeasurementsByLocationResponse(measurementService.getDateByLocationBetween(location, from, to).stream()
                 .map(converter::convertToMeasurementResponseByLocation).collect(Collectors.toList()));
     }
