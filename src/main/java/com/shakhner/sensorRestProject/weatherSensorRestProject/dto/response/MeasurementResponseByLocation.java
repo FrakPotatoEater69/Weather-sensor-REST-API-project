@@ -1,9 +1,14 @@
 package com.shakhner.sensorRestProject.weatherSensorRestProject.dto.response;
 
+import io.swagger.annotations.ApiModel;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+
+@ApiModel(description = "Response when requesting by location,so name of location is not indicated," +
+        " the Sensor contains only its name")
 public class MeasurementResponseByLocation {
     @Min(value = -100, message = "minimum temperature value is -100")
     @Max(value = 100, message = "maximum temperature value is -100")

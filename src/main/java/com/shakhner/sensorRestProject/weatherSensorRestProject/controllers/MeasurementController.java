@@ -42,8 +42,7 @@ public class MeasurementController {
         this.measurementValidator = measurementValidator;
     }
 
-    @PostMapping
-    @RequestMapping("/add")
+    @PostMapping("/add")
     public ResponseEntity<HttpStatus> addMeasurement(@RequestBody @Valid MeasurementDTO measurementDTO,
                                                      BindingResult bindingResult) throws ParseException {
 

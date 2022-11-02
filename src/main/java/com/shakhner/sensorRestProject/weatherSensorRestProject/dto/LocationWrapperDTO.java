@@ -1,8 +1,11 @@
 package com.shakhner.sensorRestProject.weatherSensorRestProject.dto;
 
+import io.swagger.annotations.ApiModel;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+@ApiModel(description = "Class for getting location info from API requests")
 public class LocationWrapperDTO {
 
     @NotEmpty(message = "name of location should not be empty")

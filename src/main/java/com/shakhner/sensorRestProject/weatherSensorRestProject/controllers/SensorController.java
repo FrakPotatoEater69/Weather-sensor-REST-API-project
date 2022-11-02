@@ -58,8 +58,7 @@ public class SensorController {
                 .findAny().orElseThrow(() -> new SensorNotFoundException());
     }
 
-    @PostMapping
-    @RequestMapping("/register")
+    @PostMapping("/register")
     public ResponseEntity<HttpStatus> registerSensor(@RequestBody @Valid SensorDTO sensorDTO, BindingResult bindingResult) {
 
         sensorValidator.validate(sensorDTO, bindingResult);
@@ -72,8 +71,7 @@ public class SensorController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @PatchMapping
-    @RequestMapping("/{name}/updatelocation")
+    @PatchMapping("/{name}/updatelocation")
     public ResponseEntity<HttpStatus> updateLocation(@PathVariable("name") String name, @RequestBody @Valid LocationWrapperDTO locationWrapperDTO,
                                                      BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
