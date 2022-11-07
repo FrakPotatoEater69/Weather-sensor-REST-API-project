@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  database:
+    image: 'postgres:10'
+    container_name: 'java-postgres'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=J2m2ik21q
+      - POSTGRES_DB=weatherSensor
+
+  app:
+    build: ./
+    depends_on:
+      - database
+    container_name: 'java_app'
+    ports:
+      - 8080:8080
+

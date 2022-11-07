@@ -75,7 +75,7 @@ public class MeasurementController {
 
     }
 
-    @GetMapping("/getRainyDaysCountForLocation")
+        @GetMapping("/getRainyDaysCountForLocation")
     public Integer getRainyDaysCountForLocation(@RequestParam("location") String location) {
         return measurementService.getRainyDaysCountForLocation(location);
     }
