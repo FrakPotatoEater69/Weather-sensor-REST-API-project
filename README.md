@@ -3,6 +3,8 @@ This is the introductory documentation for my REST API service that allows you t
 
 An application was written using Spring Boot, everything was validated using the Hibernate Validator, the database was PostgrSQL. Also in this project, you can generate full documentation using Swagger by simply running the application and following the link localhost:8080/swagger-ui/index.html#/. I tried to make it as clear as possible. The whole project is also loaded into the Docker container, I used FlyWay to generate tables, you can also find all the SQL scripts, Dockerfile and docker-compose files in the root of the project. Also for your convenience, a client for this API was written, the link to it is below! Everything works correctly, both through Spring Boot and through the Docker container.
 
+client application: https://github.com/FrakBeerlover69/Weather-Sensor-client-application
+
 Now about the project itself, it has 2 main controllers - SensorController and MeasurementController.
 First about the SensorController.
 
